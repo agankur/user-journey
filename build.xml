@@ -1,0 +1,105 @@
+<?xml version="1.0" ?>
+<project name="user_journey" default="all">
+
+    <property environment="env"/>
+
+    <condition property="setup" value="${env.env}" else="dev">
+        <isset property="env.env" />
+    </condition>
+    <property name="vm.size" value="512m"/>
+    <property name="log4j.configuration" value="log4j.xml"/>
+    <property name="source.dir" value="sources/java" />
+    <property name="src.dir" value="${source.dir}/src"/>
+    <property name="test.dir" value="${source.dir}/test"/>
+    <property name="lib.dir" value="lib"/>
+    <property name="scripts.dir" value="scripts"/>
+    <property name="reports.dir" value="reports"/>
+    <property name="config.dir" value="config/${setup}"/>
+    <echo message="Running ant for : ${config.dir} " />
+    <property name="version" value="1.0"/>
+
+    <target name="init">
+        <mkdir dir="${source.dir}/build/classes"/>
+        <mkdir dir="${source.dir}/build/test/classes"/>
+        <mkdir dir="deploy/lib"/>
+	<mkdir dir="deploy/lib/scala-2.10"/>
+    </target>
+
+    <path id="classpath">
+        <fileset dir="${lib.dir}" includes="**/*.jar"/>
+        <pathelement path="${config.dir}"/>
+    </path>
+
+    <path id="classpath-test">
+        <fileset dir="${lib.dir}" includes="**/*.jar"/>
+        <pathelement path="${config.dir}"/>
+    </path>
+
+    <target name="compile" depends="init">
+        <javac debug="on" srcdir="${src.dir}" destdir="${source.dir}/build/classes" encoding="utf-8">
+            <classpath>
+                <path refid="classpath"/>
+            </classpath>
+        </javac>
+
+    </target>
+
+    <target name="compiletest" depends="init,compile">
+        <javac nowarn="on" debug="on" srcdir="${test.dir}" destdir="${source.dir}/build/test/classes" encoding="utf-8">
+            <classpath>
+                <path refid="classpath"/>
+            </classpath>
+            <classpath path="build/classes"></classpath>
+        </javac>
+    </target>
+
+    <target name="manfestcp">
+        <manifestclasspath property="manifest.classpath" jarfile="user-journey.jar">
+            <classpath refid="classpath"/>
+        </manifestclasspath>
+        <echo message="Manifest Classpath: ${manifest.classpath}"/>
+    </target>
+
+    <target name="compress" depends="compile,manfestcp">
+        <jar destfile="deploy/${ant.project.name}.jar" basedir="${source.dir}/build/classes">
+        </jar>
+    </target>
+    <target name="compresstest" depends="compiletest,manfestcp">
+        <jar destfile="lib/${ant.project.name}-test.jar" basedir="${source.dir}/build/test/classes">
+            <manifest>
+                <attribute name="Class-Path" value="${manifest.classpath}"/>
+            </manifest>
+        </jar>
+    </target>
+
+
+    <target name="deploy" depends="compile,compress">
+        <copy todir="deploy/config">
+            <fileset dir="config/${setup}/"/>
+        </copy>
+        <copy todir="deploy/scripts">
+            <fileset dir="scripts"/>
+        </copy>
+        <copy todir="deploy/lib">
+            <fileset dir="lib"/>
+        </copy>
+        <copy todir="deploy/spark-jobs">
+            <fileset dir="spark-jobs"/>
+        </copy>
+        <copy todir="deploy/hive-jobs">
+            <fileset dir="hive-jobs"/>
+        </copy>
+        <copy todir="deploy/lib/scala-2.10">
+            <fileset dir="sources/scala/target/scala-2.10"/>
+        </copy>
+    </target>
+
+    <target name="clean">
+        <delete dir="build"/>
+        <delete dir="deploy"/>
+    </target>
+
+    <target name="all" depends="clean,deploy">
+    </target>
+
+</project>
