@@ -37,7 +37,7 @@ object DailyBaseJobs{
           def updateDailyUserJourney ={
              val tableToUpdate = "sj_user_journey_info" ;
              val userEventGroup = hiveContext.hql(s"SELECT user_id , event_id , collect_set(timestr),collect_set(item_id) FROM $activityTable GROUP BY user_id, event_id ")
-             val userEventInfo = userEventGroup.map {case Row(user_id: String, event_id:String,timeArray: Iterable[Long],itemArray : Iterable[String]) => getUserEventInfo(user_id,event_id,timeArray,itemArray)} ;
+             val userEventInfo = userEventGroup.map {case Row(user_id: String, event_id:String,timeArray: Array[Long],itemArray : Array[String]) => getUserEventInfo(user_id,event_id,timeArray,itemArray)} ;
              userEventInfo.collect()
              userEventInfo.registerTempTable("DailyUserJourney")
             (hiveContext.hql(s"INSERT OVERWRITE TABLE $tableToUpdate  PARTITION(day='$day') " +
@@ -50,6 +50,11 @@ object DailyBaseJobs{
             hiveContext.hql("create temporary function sourceevent as 'com.bsb.portal.sojourn.hive.udf.SourceEvent' ")
             val todayUsers = hiveContext.hql(s"SELECT user_id ,sessionnum(timestr,user_id) as sessionNum,sourceevent(timestr,user_id,event_id) as source_event_id,event_id as destination_event_id " +
               s"FROM (SELECT DISTINCT user_id,timestr,event_id FROM $activityTable ORDER BY user_id,timestr)T1 ")
+            todayUsers.collect()
+            todayUsers.registerTempTable("DailyUserEventDirection")
+            (hiveContext.hql(s"INSERT OVERWRITE TABLE $tableToUpdate  PARTITION(day='$day') " +
+              s"SELECT * FROM DailyUserEventDirection "))
+            
           }
           
 
