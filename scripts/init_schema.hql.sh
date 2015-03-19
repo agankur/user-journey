@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS sj_event_info(
 CREATE TABLE IF NOT EXISTS sj_user_journey_info(
     user_id                 STRING,
     event_id                INT,
-    timediff_array          ARRAY<INT>,
+    timestr_array          ARRAY<LONG>,
     song_id_array           ARRAY<STRING>)
    PARTITIONED BY (day STRING)
    STORED as orc;

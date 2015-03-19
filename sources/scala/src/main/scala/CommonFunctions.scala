@@ -1,6 +1,6 @@
 object CommonFunctions {
 
-  case class DailyUserEventInfo(user_id:String,event_id:String,time_array: Array[Long],song_id_array :Array[String]) ;
+  case class DailyUserEventInfo(user_id:String,event_id:String,timestr_array: Array[Long],song_id_array :Array[String]) ;
 
   val ALLJOBKEYLIST = Array("DailyUserJourney","DailyUserEventDirection") ;
   

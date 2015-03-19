@@ -14,7 +14,7 @@ echo "Running for DAYSTR=${DAYSTR}";
 hive DAYSTR=${DAYSTR} -d HOME=${HOME} -v -e "
 use sojourn;
 INSERT OVERWRITE TABLE sj_user_journey_info  PARTITION(day='$DAYSTR')
-SELECT user_id , event_id , collect_set(timestr),collect_set(item_id)
+SELECT user_id , event_id , collect_set(timestr) as timestr_array,collect_set(item_id) as song_id_array
 (
     SELECT T1.user_id as user_id,T2.id as event_id,T1.item_id as item_id,T1.timestr as timestr
     FROM 
