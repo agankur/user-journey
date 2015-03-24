@@ -22,7 +22,8 @@
         <mkdir dir="${source.dir}/build/classes"/>
         <mkdir dir="${source.dir}/build/test/classes"/>
         <mkdir dir="deploy/lib"/>
-	<mkdir dir="deploy/lib/scala-2.10"/>
+        <mkdir dir="deploy/resources" />
+	    <mkdir dir="deploy/lib/scala-2.10"/>
     </target>
 
     <path id="classpath">
@@ -82,6 +83,9 @@
         </copy>
         <copy todir="deploy/lib">
             <fileset dir="lib"/>
+        </copy>
+        <copy todir="deploy/resources">
+            <fileset dir="resources"/>
         </copy>
         <copy todir="deploy/spark-jobs">
             <fileset dir="spark-jobs"/>

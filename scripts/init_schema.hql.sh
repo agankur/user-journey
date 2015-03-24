@@ -24,18 +24,17 @@ CREATE TABLE IF NOT EXISTS sj_event_info(
 CREATE TABLE IF NOT EXISTS sj_user_journey_info(
     user_id                 STRING,
     event_id                INT,
-    timestr_array           ARRAY<BIGINT>,
-    song_id_array           ARRAY<STRING>)
-   PARTITIONED BY (day STRING)
+    offset                  BIGINT
+    time_diff_array         ARRAY<INT>,
+    meta_info_array         ARRAY<STRUCT<STRING:STRING>>)
    STORED as orc;
 
 CREATE TABLE IF NOT EXISTS sj_user_event_direction_info(
    user_id                  STRING,
-   session_num              INT,
-   source_event_id          INT,
-   destination_event_id     INT)
-  PARTITIONED BY (day STRING)
-  STORED as orc; 
+   begin_day                STRING,
+   end_day                  STRING,
+   unique_bi_event_array    ARRAY<STRUCT<STRING:INT>>)
+  STORED as orc;
+
  "
- 
- 
+

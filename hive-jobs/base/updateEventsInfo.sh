@@ -13,7 +13,7 @@ fi
 echo "Running for DAYSTR=${DAYSTR}";
 hive DAYSTR=${DAYSTR} -d HOME=${HOME} -v -e "
 use sojourn;
-LOAD DATA LOCAL INPATH '${HOME}/current/lib/eventIdData' OVERWRITE INTO TABLE sj_event_info;
+LOAD DATA LOCAL INPATH '${HOME}/current/resources/eventIdData' OVERWRITE INTO TABLE sj_event_info;
 "
 
 
