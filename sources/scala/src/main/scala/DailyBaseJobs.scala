@@ -37,17 +37,17 @@ object DailyBaseJobs{
           }
           
           def updateTotalSummary = {
-            val totalSummary = hive.hql(s"SELECT source_event_id,destination_event_id,sum(count) as count FROM  $eventTable GROUP BY source_event_id,destination_event_id ")
+            val totalSummary = hiveContext.hql(s"SELECT source_event_id,destination_event_id,sum(count) as count FROM  $eventTable GROUP BY source_event_id,destination_event_id ")
             val graphInfo = totalSummary.map { case Row(source_event_id: String, destination_event_id: String,count: Int) => (source_event_id,destination_event_id,count) }.collect
             val totalSum  = graphInfo.reduceLeft(_._3 + _._3);
             val weightedGraph = graphInfo.map{ case (x,y,z) => (x,y,z * -1.0/totalSum) }
             val numEdges = weightedGraph.length
             val numVertices = weightedGraph.flatMap{ case(a,b) => List(a,b)}.toSet.size
-            File file = new File("/opt/bsb/sojourn/current/resources/totalSummary.txt");
-            if (!file.exists()) {
-              file.createNewFile();
+            val textFile = new File("/opt/bsb/sojourn/current/resources/totalSummary.txt");
+            if (!textFile.exists()) {
+              textFile.createNewFile();
             }
-            FileWriter fw = new FileWriter(file.getAbsoluteFile());
+            FileWriter fw = new FileWriter(textFile.getAbsoluteFile());
             BufferedWriter bw = new BufferedWriter(fw);
             bw.write(str(numVertices) + "\n" + str(numEdges) + "\n")
             weightedGraph.foreach {case (x,y,z) => bw.write(x + " " + y +" "+ str(z) + "\n")}
