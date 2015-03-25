@@ -8,8 +8,6 @@ import java.util.Locale;
  *  <i>Standard output</i>. This class provides methods for writing strings
  *  and numbers to standard output.
  *  <p>
- *  For additional documentation, see <a href="http://introcs.cs.princeton.edu/15inout">Section 1.5</a> of
- *  <i>Introduction to Programming in Java: An Interdisciplinary Approach</i> by Robert Sedgewick and Kevin Wayne.
  *
  *  @author Robert Sedgewick
  *  @author Kevin Wayne
