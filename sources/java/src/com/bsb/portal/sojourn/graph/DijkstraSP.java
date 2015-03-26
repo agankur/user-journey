@@ -147,8 +147,6 @@ public class DijkstraSP {
 
         // compute shortest paths
         DijkstraSP sp = new DijkstraSP(G, s);
-
-
         // print shortest path
         for (int t = 0; t < G.V(); t++) {
             if (sp.hasPathTo(t)) {
