@@ -32,7 +32,7 @@ do
         hive -d DATE=${now} -v -e '
           use sojourn;
           INSERT INTO TABLE  temp_user_event_direction
-          SELECT DISTINCT user_id,screen_id,action_id,server_timestr as timestr
+          SELECT DISTINCT user_id,screen_id,action_id,timestr as timestr
           FROM twang.ext_analytics_log
           WHERE (day = "${DATE}" ) AND (user_id IS NOT NULL) AND (user_id != "-") AND (server_timestr IS NOT NULL)
         '

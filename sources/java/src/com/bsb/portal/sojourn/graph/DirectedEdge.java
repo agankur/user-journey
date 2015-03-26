@@ -53,7 +53,8 @@ public class DirectedEdge {
      * @return a string representation of the directed edge
      */
     public String toString() {
-        return v + "->" + w + " " + String.format("%5.2f", (1-weight));
+        
+        return v + "->" + w + " " + String.format("%1.10f", (1-weight));
     }
 
     /**
