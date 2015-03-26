@@ -45,7 +45,7 @@ use sojourn;
 add jar ${HOME}/current/lib/UserJourney.jar ;
 create temporary function sourceevent as "com.bsb.portal.sojourn.hive.udf.SourceEvent" ;
 
-INSERT OVERWRITE TABLE sj_user_event_direction_info PARTITION(start_day = "${SDAY}", end_day = "${EDAY}" )
+INSERT OVERWRITE TABLE sj_user_event_direction_info PARTITION(end_day = "${EDAY}" , start_day = "${SDAY}")
 SELECT user_id,source_event_id,destination_event_id,count(*)
 FROM
 (

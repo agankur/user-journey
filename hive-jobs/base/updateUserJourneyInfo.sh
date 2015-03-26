@@ -40,7 +40,7 @@ done
 echo "Processing User Jouney Info"
 hive -d SDAY=$START_DAY -d EDAY=$DAYSTR -v -e '
 use sojourn;
-INSERT OVERWRITE TABLE user_journey_info PARTITION(start_day = "${SDAY}", end_day = "${EDAY}" )
+INSERT OVERWRITE TABLE user_journey_info PARTITION(end_day = "${EDAY}" , start_day = "${SDAY}")
 SELECT user_id,event_id,time_diff_array,map("item_id",item_array) as meta_info_array
 FROM
 (

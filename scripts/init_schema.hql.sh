@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS sj_user_journey_info(
     event_id                INT,
     time_diff_array         ARRAY<INT>,
     meta_info_map           MAP<STRING,ARRAY<STRING>>)
-   PARTITIONED BY (start_day STRING,end_day STRING)
+   PARTITIONED BY (end_day STRING,start_day STRING)
    STORED as orc;
 
 CREATE TABLE IF NOT EXISTS sj_user_event_direction_info(
@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS sj_user_event_direction_info(
    source_event_id          INT,
    destination_event_id     INT,
    count                    INT)
-  PARTITIONED BY (start_day STRING,end_day STRING)
+  PARTITIONED BY (end_day STRING,start_day STRING)
   STORED as orc;
 
  "
