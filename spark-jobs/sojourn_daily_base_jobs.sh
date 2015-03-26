@@ -31,14 +31,15 @@ function MAIN()
    if [ -z ${DAYSTR} ]
    then
       DAYSTR=`date -d "1 day ago" '+%Y-%m-%d'`
+      
    fi
-   monthStr=`echo ${DAYSTR} | awk -F"-" '{print $1"-"$2}'`
+   START_DAY=`date +"%Y-%m-%d" -d "$DAYSTR - 6 days"`;
    if [ -z ${NUM_EXECUTOR} ]
    then
       NUM_EXECUTOR=5
    fi
-   loggerInfo "Running Job -  ${JOB_CLASS} : ${SPARK_HOME}/bin/spark-submit --master yarn-client --class ${JOB_CLASS} --jars ${JOB_DEP_JARS} --num-executors ${NUM_EXECUTOR} --executor-memory 4G  ${JOB_JAR} ${monthStr} ${DAYSTR} ${JOBS_TO_RUN}"
-   ${SPARK_HOME}/bin/spark-submit --master yarn-client --class ${JOB_CLASS} --jars ${JOB_DEP_JARS} --num-executors ${NUM_EXECUTOR} --executor-memory 4G ${JOB_JAR} ${monthStr} ${DAYSTR} ${JOBS_TO_RUN} ;
+   loggerInfo "Running Job -  ${JOB_CLASS} : ${SPARK_HOME}/bin/spark-submit --master yarn-client --class ${JOB_CLASS} --jars ${JOB_DEP_JARS} --num-executors ${NUM_EXECUTOR} --executor-memory 4G  ${JOB_JAR} ${START_DAY} ${DAYSTR} ${JOBS_TO_RUN}"
+   ${SPARK_HOME}/bin/spark-submit --master yarn-client --class ${JOB_CLASS} --jars ${JOB_DEP_JARS} --num-executors ${NUM_EXECUTOR} --executor-memory 4G ${JOB_JAR} ${START_DAY} ${DAYSTR} ${JOBS_TO_RUN} ;
    loggerInfo "***      Script: $0    END   ***";
 
 }
