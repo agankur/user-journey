@@ -42,7 +42,7 @@ object DailyBaseJobs{
             val totalSum  = graphInfo.map(_._3).reduceLeft(_ + _)
             val weightedGraph = graphInfo.map { case (x,y,z) => (x,y,1- (z*1.0/totalSum)) }
             val numEdges = weightedGraph.length
-            val numVertices = weightedGraph.flatMap{ case(a,b,c) => List(a,b) }.toSet.max
+            val numVertices = weightedGraph.flatMap{ case(a,b,c) => List(a,b) }.toSet.max + 1
             val textFile = new File("/opt/bsb/sojourn/current/resources/totalSummary.txt");
             if (!textFile.exists()) {
               textFile.createNewFile();
@@ -59,13 +59,13 @@ object DailyBaseJobs{
             val totalSummary = hiveContext.hql(s"SELECT T1.source_event_id as source_event_id,T1.destination_event_id as destination_event_id,sum(count) as count " +
               s"FROM $eventTable T1 INNER JOIN " +
               s"(SELECT DISTINCT user_id FROM $eventTable where destination_event_id = 311 )T2 " +
-              s"ON T1.user_id = T2.user_id" +
+              s"ON T1.user_id = T2.user_id " +
               s"GROUP BY T1.source_event_id,T1.destination_event_id")
             val graphInfo = totalSummary.map { case Row(source_event_id: Int, destination_event_id: Int,count: Long) => (source_event_id,destination_event_id,count) }.collect
             val totalSum  = graphInfo.map(_._3).reduceLeft(_ + _)
             val weightedGraph = graphInfo.map { case (x,y,z) => (x,y,1- (z*1.0/totalSum)) }
             val numEdges = weightedGraph.length
-            val numVertices = weightedGraph.flatMap{ case(a,b,c) => List(a,b) }.toSet.max
+            val numVertices = weightedGraph.flatMap{ case(a,b,c) => List(a,b) }.toSet.max +1
             val textFile = new File("/opt/bsb/sojourn/current/resources/downloadSummary.txt");
             if (!textFile.exists()) {
               textFile.createNewFile();
