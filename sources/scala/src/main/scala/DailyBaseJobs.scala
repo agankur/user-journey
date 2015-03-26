@@ -42,7 +42,7 @@ object DailyBaseJobs{
             val totalSum  = graphInfo.map(_._3).reduceLeft(_ + _);
             val weightedGraph = graphInfo.map{ case (x,y,z) => (x,y,1- (z*1.0/totalSum)) }
             val numEdges = weightedGraph.length
-            val numVertices = weightedGraph.flatMap{ case(a,b) => List(a,b)}.toSet.size
+            val numVertices = weightedGraph.flatMap{ case(a,b,c) => List(a,b)}.toSet.size
             val textFile = new File("/opt/bsb/sojourn/current/resources/totalSummary.txt");
             if (!textFile.exists()) {
               textFile.createNewFile();

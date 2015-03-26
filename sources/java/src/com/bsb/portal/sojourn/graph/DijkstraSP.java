@@ -15,8 +15,8 @@ public class DijkstraSP {
      */
     public DijkstraSP(EdgeWeightedDigraph G, int s) {
         for (DirectedEdge e : G.edges()) {
-            if (e.weight() > 0)
-                throw new IllegalArgumentException("edge " + e + " has positive weight");
+            if (e.weight() < 0)
+                throw new IllegalArgumentException("edge " + e + " has negative weight");
         }
 
         distTo = new double[G.V()];
@@ -92,8 +92,8 @@ public class DijkstraSP {
 
         // check that edge weights are nonnegative
         for (DirectedEdge e : G.edges()) {
-            if (e.weight() > 0) {
-                System.err.println("positive edge weight detected");
+            if (e.weight() < 0) {
+                System.err.println("negative edge weight detected");
                 return false;
             }
         }
@@ -152,7 +152,7 @@ public class DijkstraSP {
         // print shortest path
         for (int t = 0; t < G.V(); t++) {
             if (sp.hasPathTo(t)) {
-                StdOut.printf("%d to %d (%.2f)  ", s, t, -1* sp.distTo(t));
+                StdOut.printf("%d to %d ", s, t);
                 if (sp.hasPathTo(t)) {
                     for (DirectedEdge e : sp.pathTo(t)) {
                         StdOut.print(e + "   ");
